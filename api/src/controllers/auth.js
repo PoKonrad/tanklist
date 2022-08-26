@@ -1,81 +1,76 @@
-import dbQuery from '../configs/database.js';
+import usersModel from '../models/users.model.js';
 import argon2 from 'argon2';
 import generateToken from '../scripts/generateToken.js';
 import { Router } from 'express';
+import refreshTokenModel from '../models/refreshToken.model.js';
 
 const router = new Router();
 
 router.post('/login', async (req, res) => {
-  const postData = req.body;
-  const dbResp = await dbQuery(
-    'SELECT id, username, password, insertPerm FROM users WHERE username = ?',
-    [postData.username, postData.password]
-  );
-  console.log(postData.username);
-  if (dbResp.length === 0) {
-    res.status(400).json('No such user');
-    return;
+  const userData = req.body;
+
+  const user = await usersModel.findOne({
+    where: {
+      email: userData.email,
+    },
+  });
+
+  if (await argon2.verify(!user.password, userData.password)) {
+    throw new Error('Wrong credentials');
   }
 
-  if (await argon2.verify(dbResp[0].password, postData.password)) {
-    console.log('Success!');
-    return res
-      .status(200)
-      .json(
-        await generateToken(
-          dbResp[0].username,
-          dbResp[0].id,
-          dbResp[0].insertPerm
-        )
-      );
-  } else {
-    return res.status(400).json({
-      err: 'wrongLogin',
-    });
-  }
+  const token = await generateToken(user.name, user.id);
+  return res.status(200).json(token);
 });
 
 router.post('/register', async (req, res) => {
   const userData = req.body;
-  try {
-    const resp = await dbQuery(
-      'INSERT INTO users (username, password) VALUES (?, ?)',
-      [userData.username, await argon2.hash(userData.password)]
-    );
-    console.log(resp);
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json('Failure');
-  }
+
+  await usersModel.create({
+    name: userData.name,
+    country: userData.country,
+    email: userData.email,
+    password: argon2.hash(userData.password),
+    button: userData.button,
+    creationData: new Date(),
+  });
+
   return res.status(200).json('Success');
 });
 
 router.post('/refreshToken', async (req, res) => {
   const refToken = req.body.refreshToken;
 
-  const dbResp = await dbQuery(
-    'SELECT refresh.token, refresh.expiration, refresh.user_id, users.username, users.insertPerm FROM refresh INNER JOIN users ON users.id = refresh.user_id WHERE refresh.token = ?',
-    [refToken]
-  );
-  console.log(dbResp[0]);
-  if (new Date(dbResp[0].expiration) < new Date()) {
-    return res.status(400).json('Token Expired');
+  const refTokenData = await refreshTokenModel.findOne({
+    where: {
+      refreshToken: refToken,
+    },
+  });
+
+  if (new Date(refTokenData.expiration) < new Date()) {
+    throw new Error('Token Expired');
   }
 
-  res
-    .status(200)
-    .json(
-      await generateToken(
-        dbResp[0].username,
-        dbResp[0].user_id,
-        dbResp[0].insertPerm
-      )
-    );
+  const token = await generateToken(refTokenData.name, refTokenData.userID);
+
+  res.status(200).json(token);
 });
 
 router.post('/logOff', async (req, res) => {
-  const userData = req.body;
-  await dbQuery('DELETE FROM refresh WHERE token = ?', [userData.refreshToken]);
+  const userID = req.body.id;
+
+  usersModel.destroy({
+    where: {
+      id: userID,
+    },
+  });
+
+  refreshTokenModel.destroy({
+    where: {
+      userId: userID,
+    },
+  });
+
   return res.status(200).json('Logged out');
 });
 
