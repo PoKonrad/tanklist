@@ -1,10 +1,11 @@
 import db from '../configs/dbConnect';
-import { DataTypes } from 'sequelize/types';
+import { DataTypes } from 'sequelize';
 
 db.define('tanks', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
+    primaryKey: true,
   },
   sideNumber: {
     type: DataTypes.STRING,
