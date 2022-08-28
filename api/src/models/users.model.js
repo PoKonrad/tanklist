@@ -25,10 +25,7 @@ const users = db.define('users', {
   },
   button: {
     type: DataTypes.BOOLEAN,
-  },
-  creationDate: {
-    type: DataTypes.DATE,
-  },
+  }
 });
 
 export default users

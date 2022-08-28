@@ -1,7 +1,11 @@
-import db from '../configs/dbConnect';
+import db from '../configs/dbConnect.js';
 import { DataTypes } from 'sequelize';
 
-db.define('tanks', {
+const dateTomorrow = new Date();
+
+dateTomorrow.setDate(dateTomorrow.getDate() + 1);
+
+const tankModel = db.define('tanks', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -22,14 +26,14 @@ db.define('tanks', {
   productionYear: {
     type: DataTypes.INTEGER(4),
     validate: {
-      max: parseInt(new Date().toJSON().slice(0, 4)),
+      max: parseInt(dateTomorrow.toJSON().slice(0, 4)),
       min: 1900,
     },
   },
   introduced: {
     type: DataTypes.DATEONLY,
     validate: {
-      isBefore: new Date().toJSON().slice(0, 10),
+      isBefore: dateTomorrow.toJSON().slice(0, 10),
       isAfter: '1969-12-31',
     },
   },
@@ -38,11 +42,7 @@ db.define('tanks', {
   },
   armorThickness: {
     type: DataTypes.INTEGER,
-  },
-  created: {
-    type: DataTypes.DATE,
-  },
-  updated: {
-    type: DataTypes.DATE,
-  },
+  }
 });
+
+export default tankModel;

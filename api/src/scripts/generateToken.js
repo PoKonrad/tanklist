@@ -2,15 +2,21 @@ import refreshTokenModel from '../models/refreshToken.model.js';
 import jwt from 'jsonwebtoken';
 import { cryptoRandomStringAsync } from 'crypto-random-string';
 
+const addHours = (numOfHours, date) => {
+  date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
+
+  return date;
+}
+
 /**
- * @param {string} user Username
+ * @param {string} email Email
  * @param {number} id User id
  * @returns Token object
  */
 const generateToken = async (user, id) => {
   const dataToSign = {
     sub: id,
-    username: user,
+    email: user,
   };
 
   const refreshToken = await cryptoRandomStringAsync({ length: 40 });
@@ -24,9 +30,12 @@ const generateToken = async (user, id) => {
     },
   });
 
+  const expiresAt = addHours(4, new Date())
+
   await refreshTokenModel.create({
     userID: id,
     refreshToken: refreshToken,
+    expiration: expiresAt
   });
 
   const response = {
