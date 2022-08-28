@@ -17,11 +17,6 @@ const errorHandling = (err, req, res, next) => {
   next()
 }
 
-app.get('/', async (req, res) => {
-  await new Promise((reject, resolve )=> {
-    throw new Error('owo')
-  })
-})
 
 app.use('/auth', auth)
 app.use('/tank', tank)
