@@ -6,7 +6,7 @@ const addHours = (numOfHours, date) => {
   date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
 
   return date;
-}
+};
 
 /**
  * @param {string} email Email
@@ -30,12 +30,12 @@ const generateToken = async (user, id) => {
     },
   });
 
-  const expiresAt = addHours(4, new Date())
+  const expiresAt = addHours(4, new Date());
 
   await refreshTokenModel.create({
     userID: id,
     refreshToken: refreshToken,
-    expiration: expiresAt
+    expiration: expiresAt,
   });
 
   const response = {

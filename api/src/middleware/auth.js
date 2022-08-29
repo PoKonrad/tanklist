@@ -13,6 +13,8 @@ const auth = (req, res, next) => {
       res.locals.user = decoded;
       next();
     });
+  } else {
+    return res.status(401).json({ error: true, message: 'Missing token.' });
   }
 };
 

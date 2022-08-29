@@ -17,7 +17,7 @@ const users = db.define('users', {
     type: DataTypes.STRING,
     unique: true,
     validate: {
-      isEmail: true
+      isEmail: true,
     },
   },
   password: {
@@ -25,7 +25,7 @@ const users = db.define('users', {
   },
   button: {
     type: DataTypes.BOOLEAN,
-  }
+  },
 });
 
-export default users
+export default users;

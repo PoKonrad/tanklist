@@ -18,7 +18,7 @@ router.post('/new', async (req, res) => {
     productionYear: parseInt(tankData.productionYear),
     introduced: tankData.introduced,
     ammoCount: parseInt(tankData.ammoCount),
-    armorThickness: parseInt(tankData.armorThickness)
+    armorThickness: parseInt(tankData.armorThickness),
   });
 
   return res.status(200).json({

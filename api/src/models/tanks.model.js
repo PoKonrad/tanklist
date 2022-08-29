@@ -42,7 +42,7 @@ const tankModel = db.define('tanks', {
   },
   armorThickness: {
     type: DataTypes.INTEGER,
-  }
+  },
 });
 
 export default tankModel;
