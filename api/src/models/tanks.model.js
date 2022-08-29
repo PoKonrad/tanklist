@@ -39,9 +39,33 @@ const tankModel = db.define('tanks', {
   },
   ammoCount: {
     type: DataTypes.INTEGER,
+    validate: {
+      min: 0,
+    },
   },
-  armorThickness: {
+  armorThicknessBack: {
     type: DataTypes.INTEGER,
+    validate: {
+      min: 0,
+    },
+  },
+  armorThicknessFront: {
+    type: DataTypes.INTEGER,
+    validate: {
+      min: 0,
+    },
+  },
+  armorThicknessSide: {
+    type: DataTypes.INTEGER,
+    validate: {
+      min: 0,
+    },
+  },
+  mileage: {
+    type: DataTypes.INTEGER,
+    validate: {
+      min: 0,
+    },
   },
 });
 

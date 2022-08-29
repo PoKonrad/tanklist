@@ -18,7 +18,10 @@ router.post('/new', async (req, res) => {
     productionYear: parseInt(tankData.productionYear),
     introduced: tankData.introduced,
     ammoCount: parseInt(tankData.ammoCount),
-    armorThickness: parseInt(tankData.armorThickness),
+    armorThicknessFront: tankData.armorThicknessFront,
+    armorThicknessSide: tankData.armorThicknessSide,
+    armorThicknessBack: tankData.armorThicknessBack,
+    mileage: tankData.mileage
   });
 
   return res.status(200).json({
@@ -66,9 +69,10 @@ router.post('/:id/edit', async (req, res) => {
     productionYear: tankData.productionYear,
     introduced: tankData.intrudiction,
     ammoCount: tankData.ammoCount,
-    armorThickness: tankData.armorThickness,
-    created: new Date(),
-    updated: new Date(),
+    armorThicknessFront: tankData.armorThicknessFront,
+    armorThicknessSide: tankData.armorThicknessSide,
+    armorThicknessBack: tankData.armorThicknessBack,
+    mileage: tankData.mileage
   };
   await tankModel.update(newTank, {
     where: {
