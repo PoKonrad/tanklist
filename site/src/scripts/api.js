@@ -23,7 +23,7 @@ class api {
 
   async _fetch(method, url, auth, body, afterRefresh) {
     try {
-      const data = await fetch(url, {
+      const data = await fetch(`api${url}`, {
         method: method,
         headers: new Headers(
           auth

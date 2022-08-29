@@ -6,7 +6,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableHead,
   TableRow,
   Typography
@@ -14,14 +13,11 @@ import {
 import React, { useEffect, useState } from 'react';
 import api from '../scripts/api.js';
 import TankTableRow from './TankTableRow';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AddIcon from '@mui/icons-material/Add';
 import NewTank from './NewTank';
 
 const TankTable = () => {
   const [rows, setRows] = useState();
-  const [page, setPage] = useState(0);
   const [newDialogShown, setNewDialogShown] = useState(false);
 
   useEffect(() => {
@@ -96,14 +92,6 @@ const TankTable = () => {
                 ))
               : ''}
           </TableBody>
-          <TableFooter>
-            <IconButton onClick={() => (page === 0 ? null : setPage(page - 1))}>
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <IconButton onClick={() => setPage(page + 1)}>
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </TableFooter>
         </Table>
       </TableContainer>
     </Box>

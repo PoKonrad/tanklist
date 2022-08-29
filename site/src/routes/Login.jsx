@@ -6,11 +6,10 @@ import {
   Container,
   Grid,
   TextField,
-  Typography
+  Typography,
+  Link
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
 import api from '../scripts/api';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -48,7 +47,7 @@ const Login = () => {
     try {
       setLoading(true);
       const resp = await api.post(
-        'auth/login',
+        '/auth/login',
         {
           email: login,
           password: password
@@ -93,9 +92,7 @@ const Login = () => {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <LockOutlinedIcon sx={{ m: 1 }} />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
@@ -104,6 +101,7 @@ const Login = () => {
             margin="normal"
             label="E-Mail"
             type="email"
+            autoComplete="email"
             error={loginError.error}
             helperText={loginError.message}
             onChange={handleLoginChange}

@@ -9,6 +9,7 @@ describe('GET /tank', () => {
   });
 
   let token = null;
+  let refreshToken = null;
 
   before(async () => {
     await supertest(app)
@@ -18,7 +19,8 @@ describe('GET /tank', () => {
         password: testUser.password,
       })
       .then((resp) => {
-        token = resp.body.token;
+        token = resp.body.token,
+        refreshToken = resp.body.refreshToken
       });
   });
 
@@ -29,5 +31,11 @@ describe('GET /tank', () => {
       .expect(200);
 
     expect(resp.body.data).to.be.an('Array').and.have.lengthOf.above(0);
+  });
+
+  after(async () => {
+    await supertest(app).post('/auth/logOff').send({
+      refreshToken: refreshToken,
+    });
   });
 });

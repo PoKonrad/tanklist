@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
     throw new Error('Wrong credentials');
   }
 
-  const token = await generateToken(user.email, user.id);
+  const token = await generateToken(user.email, user.id, user.name);
   return res.status(200).json(token);
 });
 
@@ -99,7 +99,7 @@ router.post('/refreshToken', async (req, res) => {
     },
   });
 
-  const token = await generateToken(user.email, refTokenData.userID);
+  const token = await generateToken(user.email, refTokenData.userID, user.name);
 
   res.status(200).json(token);
 });

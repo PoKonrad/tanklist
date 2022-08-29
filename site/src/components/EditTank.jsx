@@ -1,4 +1,4 @@
-import { TextField, Typography, Button, Collapse, Grid } from '@mui/material';
+import { TextField, Typography, Button, Collapse, Grid, Alert } from '@mui/material';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import api from '../scripts/api';
@@ -12,8 +12,12 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
   const [introduced, setIntroduced] = useState(placeholders?.introduced);
   const [ammoCount, setAmmoCount] = useState(placeholders?.ammoCount);
   const [armor, setArmor] = useState(placeholders?.armor);
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState(false)
 
   const handleSubmit = async (e) => {
+    setError();
+    setSuccess(false)
     e.preventDefault();
     try {
       await api.post(`/tank/${id}/edit`, {
@@ -27,8 +31,10 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
         armorThickness: armor
       });
       refreshTabData();
+      setSuccess(true)
     } catch (error) {
-      // To do
+      const errorJson = await error.json();
+      setError(errorJson);
     }
   };
 
@@ -150,6 +156,12 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
             </Grid>
           </Grid>
         </Box>
+        <Collapse in={error?.error}>
+          <Alert severity="error">{error?.message}</Alert>
+        </Collapse>
+        <Collapse in={success}>
+          <Alert severity="success">Successfully edited.</Alert>
+        </Collapse>
       </Box>
     </Collapse>
   );

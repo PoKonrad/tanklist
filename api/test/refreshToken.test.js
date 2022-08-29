@@ -34,4 +34,12 @@ describe('POST /refreshToken', () => {
 
     expect(resp.body.refreshToken).to.not.equal(refreshToken);
   });
+
+  after(async () => {
+    await supertest(app)
+    .post('/auth/logOff')
+    .send({
+      refreshToken: refreshToken
+    })
+  })
 });

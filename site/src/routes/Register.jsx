@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   TextField,
   FormControlLabel,
@@ -8,7 +7,9 @@ import {
   Grid,
   Box,
   Typography,
-  Container
+  Container,
+  Alert,
+  Collapse
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useState } from 'react';
@@ -35,6 +36,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setError({
+      error: false,
+      message: ''
+    });
+
     if (!name) {
       setFirstNameError({
         error: true,
@@ -148,9 +155,7 @@ const Register = () => {
           alignItems: 'center'
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <LockOutlinedIcon sx={{ m: 1 }} />
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
@@ -159,12 +164,10 @@ const Register = () => {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
                 required
                 error={firstNameError?.error}
                 helperText={firstNameError?.message}
                 fullWidth
-                id="firstName"
                 label="First Name"
                 autoFocus
                 onChange={(e) => {
@@ -179,9 +182,7 @@ const Register = () => {
                 error={lastNameError?.error}
                 helperText={lastNameError?.message}
                 fullWidth
-                id="lastName"
                 label="Last Name"
-                name="lastName"
                 autoComplete="family-name"
                 onChange={(e) => {
                   setLastname(e.target.value);
@@ -196,9 +197,7 @@ const Register = () => {
                 helperText={emailError?.message}
                 fullWidth
                 type="email"
-                id="email"
                 label="Email Address"
-                name="email"
                 autoComplete="email"
                 onChange={handleEmail}
               />
@@ -209,11 +208,9 @@ const Register = () => {
                 fullWidth
                 helperText={passwordError?.message}
                 error={passwordError?.error}
-                name="password"
+                autoComplete="new-password"
                 label="Password"
                 type="password"
-                id="password"
-                autoComplete="new-password"
                 onChange={handlePassword}
               />
             </Grid>
@@ -224,7 +221,6 @@ const Register = () => {
                 error={countryError?.error}
                 helperText={countryError?.message}
                 label="Country of origin"
-                id="contry"
                 onChange={(e) => {
                   setCountry(e.target.value);
                   setCountryError();
@@ -235,13 +231,13 @@ const Register = () => {
               <FormControlLabel
                 control={<Checkbox value="Has Button?" color="primary" />}
                 label="Has Button?"
-                onChange={(e) => setButton(e.target.value)}
+                onChange={(e) => setButton(e.target.checked)}
               />
             </Grid>
           </Grid>
-          <Typography variant="h5" color={'red'}>
-            {error.message}
-          </Typography>
+          <Collapse in={error.error}>
+            <Alert severity="error">{error.message}</Alert>
+          </Collapse>
           <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
             Sign Up
           </Button>
