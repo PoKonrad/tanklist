@@ -11,13 +11,16 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
   const [productionYear, setProductionYear] = useState(placeholders?.productionYear);
   const [introduced, setIntroduced] = useState(placeholders?.introduced);
   const [ammoCount, setAmmoCount] = useState(placeholders?.ammoCount);
-  const [armor, setArmor] = useState(placeholders?.armor);
+  const [mileage, setMileage] = useState(placeholders?.millage);
+  const [armorFront, setArmorFront] = useState(placeholders?.armorFront);
+  const [armorBack, setArmorBack] = useState(placeholders?.armorBack);
+  const [armorSide, setArmorSide] = useState(placeholders?.armorSide);
   const [error, setError] = useState();
-  const [success, setSuccess] = useState(false)
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     setError();
-    setSuccess(false)
+    setSuccess(false);
     e.preventDefault();
     try {
       await api.post(`/tank/${id}/edit`, {
@@ -28,10 +31,13 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
         productionYear: productionYear,
         introduced: introduced,
         ammoCount: ammoCount,
-        armorThickness: armor
+        armorThicknessFront: armorFront,
+        armorThicknessBack: armorBack,
+        armorThicknessSide: armorSide,
+        mileage: mileage
       });
       refreshTabData();
-      setSuccess(true)
+      setSuccess(true);
     } catch (error) {
       const errorJson = await error.json();
       setError(errorJson);
@@ -134,6 +140,11 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
               <TextField
                 label="Ammo Count"
                 required
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
                 type="number"
                 defaultValue={placeholders?.ammoCount}
                 fullWidth
@@ -142,11 +153,62 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
             </Grid>
             <Grid item xl={3}>
               <TextField
-                label="Armor Thickness"
+                label="Mileage"
                 required
-                defaultValue={placeholders?.armorThickness}
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                defaultValue={placeholders?.mileage}
                 fullWidth
-                onChange={(e) => setArmor(e.target.value)}
+                onChange={(e) => setMileage(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Back"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                defaultValue={placeholders?.armorThicknessBack}
+                fullWidth
+                onChange={(e) => setArmorBack(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Front"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                defaultValue={placeholders?.armorThicknessFront}
+                fullWidth
+                onChange={(e) => setArmorFront(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Side"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                defaultValue={placeholders?.armorThicknessSide}
+                fullWidth
+                onChange={(e) => setArmorSide(e.target.value)}
               />
             </Grid>
             <Grid item xl={12}>

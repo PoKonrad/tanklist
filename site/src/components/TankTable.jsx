@@ -69,6 +69,9 @@ const TankTable = () => {
                 <Typography>Ammo Count</Typography>
               </TableCell>
               <TableCell align="center">
+                <Typography>Mileage</Typography>
+              </TableCell>
+              <TableCell align="center">
                 <Typography>Armor Thickness</Typography>
               </TableCell>
               <TableCell align="center">

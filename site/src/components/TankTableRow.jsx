@@ -41,7 +41,11 @@ const TankTableRow = ({ row, refreshTabData }) => {
         <TableCell align="center">{row?.productionYear}</TableCell>
         <TableCell align="center">{row?.introduced}</TableCell>
         <TableCell align="center">{row?.ammoCount}</TableCell>
-        <TableCell align="center">{row?.armorThickness}</TableCell>
+        <TableCell align="center">{row?.mileage}km</TableCell>
+        <TableCell align="center">
+          Back: {row?.armorThicknessBack}mm Front: {row?.armorThicknessFront}mm Side:{' '}
+          {row?.armorThicknessSide}mm
+        </TableCell>
         <TableCell align="center">
           {`${row?.createdAt.slice(0, 10)} ${row?.createdAt.slice(11, 19)}`}
         </TableCell>

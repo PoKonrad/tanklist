@@ -12,7 +12,10 @@ const NewTank = ({ show, refreshTabData }) => {
   const [productionYear, setProductionYear] = useState(new Date().toJSON().slice(0, 4));
   const [introduced, setIntroduced] = useState(new Date().toJSON().slice(0, 10));
   const [ammoCount, setAmmoCount] = useState();
-  const [armor, setArmor] = useState();
+  const [mileage, setMileage] = useState();
+  const [armorFront, setArmorFront] = useState();
+  const [armorBack, setArmorBack] = useState();
+  const [armorSide, setArmorSide] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = async (e) => {
@@ -27,7 +30,10 @@ const NewTank = ({ show, refreshTabData }) => {
         productionYear: productionYear,
         introduced: introduced,
         ammoCount: ammoCount,
-        armorThickness: armor
+        armorThicknessFront: armorFront,
+        armorThicknessBack: armorBack,
+        armorThicknessSide: armorSide,
+        mileage: mileage
       });
       refreshTabData();
     } catch (error) {
@@ -123,6 +129,11 @@ const NewTank = ({ show, refreshTabData }) => {
               <TextField
                 label="Ammo Count"
                 required
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
                 type="number"
                 fullWidth
                 onChange={(e) => setAmmoCount(e.target.value)}
@@ -130,11 +141,58 @@ const NewTank = ({ show, refreshTabData }) => {
             </Grid>
             <Grid item xl={3}>
               <TextField
-                label="Armor Thickness"
+                label="Mileage"
                 required
                 type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
                 fullWidth
-                onChange={(e) => setArmor(e.target.value)}
+                onChange={(e) => setMileage(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Back"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                fullWidth
+                onChange={(e) => setArmorBack(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Front"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                fullWidth
+                onChange={(e) => setArmorFront(e.target.value)}
+              />
+            </Grid>
+            <Grid item xl={4}>
+              <TextField
+                label="Armor Thickness Side"
+                required
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    min: 0
+                  }
+                }}
+                fullWidth
+                onChange={(e) => setArmorSide(e.target.value)}
               />
             </Grid>
             <Grid item xl={12}>
