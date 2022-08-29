@@ -56,7 +56,8 @@ const TankTableRow = ({ row, refreshTabData }) => {
             <IconButton
               onClick={() => {
                 setDeleteDialog(true);
-              }}>
+              }}
+            >
               <DeleteIcon />
             </IconButton>
           </ButtonGroup>
@@ -77,7 +78,8 @@ const TankTableRow = ({ row, refreshTabData }) => {
           <Button
             onClick={() => {
               setDeleteDialog(false);
-            }}>
+            }}
+          >
             Cancel
           </Button>
         </DialogActions>

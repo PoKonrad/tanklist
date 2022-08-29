@@ -24,14 +24,13 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
         productionYear: productionYear,
         introduced: introduced,
         ammoCount: ammoCount,
-        armorThickness: armor,
+        armorThickness: armor
       });
       refreshTabData();
     } catch (error) {
       // To do
     }
   };
-
 
   return (
     <Collapse in={show}>
@@ -42,7 +41,8 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
           justifyContent: 'center',
           alignContent: 'center',
           width: '100%'
-        }}>
+        }}
+      >
         <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
           Edit {placeholders?.model}.
         </Typography>
@@ -52,7 +52,8 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
           style={{
             display: 'flex',
             justifyContent: 'space-around'
-          }}>
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xl={3}>
               <TextField
@@ -143,7 +144,7 @@ const EditTank = ({ show, placeholders, id, refreshTabData }) => {
               />
             </Grid>
             <Grid item xl={12}>
-              <Button type="submit" variant='contained' fullWidth>
+              <Button type="submit" variant="contained" fullWidth>
                 Save changes
               </Button>
             </Grid>

@@ -46,7 +46,8 @@ const NewTank = ({ show, refreshTabData }) => {
           justifyContent: 'center',
           alignContent: 'center',
           width: '100%'
-        }}>
+        }}
+      >
         <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
           Add a new tank
         </Typography>
@@ -56,7 +57,8 @@ const NewTank = ({ show, refreshTabData }) => {
           style={{
             display: 'flex',
             justifyContent: 'space-around'
-          }}>
+          }}
+        >
           <Grid container spacing={2}>
             <Grid item xl={3}>
               <TextField

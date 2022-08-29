@@ -22,7 +22,7 @@ import NewTank from './NewTank';
 const TankTable = () => {
   const [rows, setRows] = useState();
   const [page, setPage] = useState(0);
-  const [newDialogShown, setNewDialogShown] = useState(false)
+  const [newDialogShown, setNewDialogShown] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -32,10 +32,9 @@ const TankTable = () => {
     getData();
   }, []);
 
-
   const refreshTabData = async () => {
     const resp = await api.get(`/tank`);
-    setNewDialogShown(false)
+    setNewDialogShown(false);
     setRows(resp.data);
   };
 
@@ -45,40 +44,41 @@ const TankTable = () => {
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
-      }}>
+      }}
+    >
       <NewTank show={newDialogShown} refreshTabData={refreshTabData} />
       <TableContainer component={Paper}>
         <Table aria-label="Table containing tanks">
           <TableHead>
             <TableRow>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Tank Model</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Producer</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Side Number</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Current Mod</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Production</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Introduced</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Ammo Count</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Armor Thickness</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Created</Typography>
               </TableCell>
-              <TableCell align='center'>
+              <TableCell align="center">
                 <Typography>Last Modified</Typography>
               </TableCell>
               <TableCell align="right">
