@@ -1,28 +1,32 @@
 import { TextField, Typography, Button, Collapse, Grid, Alert } from '@mui/material';
 import { Box } from '@mui/system';
-import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
-import api from '../scripts/api';
+import React, { useState } from 'react';
 
-const NewTank = ({ show, refreshTabData }) => {
-  const [model, setModel] = useState();
-  const [producer, setProducer] = useState();
-  const [sideNumber, setSideNumber] = useState();
-  const [currentMod, setCurrentMod] = useState();
-  const [productionYear, setProductionYear] = useState(new Date().toJSON().slice(0, 4));
-  const [introduced, setIntroduced] = useState(new Date().toJSON().slice(0, 10));
-  const [ammoCount, setAmmoCount] = useState();
-  const [mileage, setMileage] = useState();
-  const [armorFront, setArmorFront] = useState();
-  const [armorBack, setArmorBack] = useState();
-  const [armorSide, setArmorSide] = useState();
+const EditTank = ({ show, placeholders, id, refreshTabData, handleFetch }) => {
+  const [model, setModel] = useState(placeholders?.model);
+  const [producer, setProducer] = useState(placeholders?.producer);
+  const [sideNumber, setSideNumber] = useState(placeholders?.sideNumber);
+  const [currentMod, setCurrentMod] = useState(placeholders?.currentMod);
+  const [productionYear, setProductionYear] = useState(
+    placeholders?.productionYear ? placeholders?.productionYear : new Date().toJSON().slice(0, 4)
+  );
+  const [introduced, setIntroduced] = useState(
+    placeholders?.introduced ? placeholders?.introduced : new Date().toJSON().slice(0, 10)
+  );
+  const [ammoCount, setAmmoCount] = useState(placeholders?.ammoCount);
+  const [mileage, setMileage] = useState(placeholders?.millage);
+  const [armorFront, setArmorFront] = useState(placeholders?.armorFront);
+  const [armorBack, setArmorBack] = useState(placeholders?.armorBack);
+  const [armorSide, setArmorSide] = useState(placeholders?.armorSide);
   const [error, setError] = useState();
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     setError();
+    setSuccess(false);
+    e.preventDefault();
     try {
-      await api.post(`/tank/new`, {
+      await handleFetch({
         sideNumber: sideNumber,
         producer: producer,
         model: model,
@@ -36,15 +40,15 @@ const NewTank = ({ show, refreshTabData }) => {
         mileage: mileage
       });
       refreshTabData();
+      setSuccess(true);
     } catch (error) {
-      const errorMessage = await error.json();
-      // To do
-      setError(errorMessage);
+      const errorJson = await error.json();
+      setError(errorJson);
     }
   };
 
   return (
-    <Collapse in={show}>
+    <Collapse in={show} unmountOnExit>
       <Box
         sx={{
           display: 'flex',
@@ -55,7 +59,7 @@ const NewTank = ({ show, refreshTabData }) => {
         }}
       >
         <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
-          Add a new tank
+          {placeholders?.model ? `Edit ${placeholders?.model}` : 'Add a new tank'}
         </Typography>
         <Box
           component={'form'}
@@ -70,6 +74,7 @@ const NewTank = ({ show, refreshTabData }) => {
               <TextField
                 label="Tank Model"
                 required
+                defaultValue={placeholders?.model}
                 fullWidth
                 onChange={(e) => setModel(e.target.value)}
               />
@@ -78,6 +83,7 @@ const NewTank = ({ show, refreshTabData }) => {
               <TextField
                 label="Producer"
                 required
+                defaultValue={placeholders?.producer}
                 fullWidth
                 onChange={(e) => setProducer(e.target.value)}
               />
@@ -86,6 +92,7 @@ const NewTank = ({ show, refreshTabData }) => {
               <TextField
                 label="Side Number"
                 required
+                defaultValue={placeholders?.sideNumber}
                 fullWidth
                 onChange={(e) => setSideNumber(e.target.value)}
               />
@@ -94,6 +101,7 @@ const NewTank = ({ show, refreshTabData }) => {
               <TextField
                 label="Current Mod"
                 required
+                defaultValue={placeholders?.currentMod}
                 fullWidth
                 onChange={(e) => setCurrentMod(e.target.value)}
               />
@@ -119,6 +127,12 @@ const NewTank = ({ show, refreshTabData }) => {
                 label="Introduced"
                 required
                 type="Date"
+                InputProps={{
+                  inputProps: {
+                    min: '1970-01-01',
+                    max: new Date().toJSON().slice(0, 10)
+                  }
+                }}
                 defaultValue={new Date().toJSON().slice(0, 10)}
                 fullWidth
                 onChange={(e) => setIntroduced(e.target.value)}
@@ -135,6 +149,7 @@ const NewTank = ({ show, refreshTabData }) => {
                   }
                 }}
                 type="number"
+                defaultValue={placeholders?.ammoCount}
                 fullWidth
                 onChange={(e) => setAmmoCount(e.target.value)}
               />
@@ -149,6 +164,7 @@ const NewTank = ({ show, refreshTabData }) => {
                     min: 0
                   }
                 }}
+                defaultValue={placeholders?.mileage}
                 fullWidth
                 onChange={(e) => setMileage(e.target.value)}
               />
@@ -163,6 +179,7 @@ const NewTank = ({ show, refreshTabData }) => {
                     min: 0
                   }
                 }}
+                defaultValue={placeholders?.armorThicknessBack}
                 fullWidth
                 onChange={(e) => setArmorBack(e.target.value)}
               />
@@ -177,6 +194,7 @@ const NewTank = ({ show, refreshTabData }) => {
                     min: 0
                   }
                 }}
+                defaultValue={placeholders?.armorThicknessFront}
                 fullWidth
                 onChange={(e) => setArmorFront(e.target.value)}
               />
@@ -191,23 +209,27 @@ const NewTank = ({ show, refreshTabData }) => {
                     min: 0
                   }
                 }}
+                defaultValue={placeholders?.armorThicknessSide}
                 fullWidth
                 onChange={(e) => setArmorSide(e.target.value)}
               />
             </Grid>
             <Grid item xl={12}>
-              <Button type="submit" variant="contained" fullWidth endIcon={<AddIcon />}>
-                Add
+              <Button type="submit" variant="contained" fullWidth>
+                Save changes
               </Button>
-              <Collapse in={error?.error}>
-                <Alert severity="error">{error?.message}</Alert>
-              </Collapse>
             </Grid>
           </Grid>
         </Box>
+        <Collapse in={error?.error}>
+          <Alert severity="error">{error?.message}</Alert>
+        </Collapse>
+        <Collapse in={success}>
+          <Alert severity="success">Successfully edited.</Alert>
+        </Collapse>
       </Box>
     </Collapse>
   );
 };
 
-export default NewTank;
+export default EditTank;
