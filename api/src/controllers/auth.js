@@ -4,6 +4,7 @@ import argon2 from 'argon2';
 import generateToken from '../scripts/generateToken.js';
 import { Router } from 'express';
 import refreshTokenModel from '../models/refreshToken.model.js';
+import { body, validationResult } from 'express-validator';
 
 const router = Router();
 
@@ -28,47 +29,51 @@ router.post('/login', async (req, res) => {
   return res.status(200).json(token);
 });
 
-router.post('/register', async (req, res) => {
-  const userData = req.body;
+router.post(
+  '/register',
+  body('email').isEmail(),
+  body('password').isStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+    returnScore: false,
+  }),
+  async (req, res) => {
+    const userData = req.body;
 
-  if (
-    !userData.password.match(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/g
-    )
-  ) {
-    throw new Error('Not a safe password');
-  }
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({
+        error: true,
+        errors: validationErrors,
+      });
+    }
 
-  if (
-    !userData.email.match(
-      /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    )
-  ) {
-    throw new Error('Not a valid email address');
-  }
+    const userWithEmail = await usersModel.findOne({
+      where: {
+        email: userData.email,
+      },
+    });
 
-  const userWithEmail = await usersModel.findOne({
-    where: {
+    if (userWithEmail?.id) {
+      throw new Error('User already exists');
+    }
+
+    const hashedPassword = await argon2.hash(userData.password);
+
+    await usersModel.create({
+      name: userData.name,
+      country: userData.country,
       email: userData.email,
-    },
-  });
+      password: hashedPassword,
+      button: userData.button,
+    });
 
-  if (userWithEmail?.id) {
-    throw new Error('User already exists');
+    return res.status(200).json('Success');
   }
-
-  const hashedPassword = await argon2.hash(userData.password);
-
-  await usersModel.create({
-    name: userData.name,
-    country: userData.country,
-    email: userData.email,
-    password: hashedPassword,
-    button: userData.button,
-  });
-
-  return res.status(200).json('Success');
-});
+);
 
 router.post('/refreshToken', async (req, res) => {
   const refToken = req.body.refreshToken;
@@ -113,7 +118,7 @@ router.post('/logOff', async (req, res) => {
     },
   });
 
-  return res.status(200).json('Logged out');
+  return res.sendStatus(204);
 });
 
 const errorHandling = (err, req, res, next) => {

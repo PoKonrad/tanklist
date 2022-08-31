@@ -3,7 +3,7 @@ import app from '../index.js';
 import testUser from './testUser.js';
 import { expect } from 'chai';
 
-describe('GET /tank', () => {
+describe('GET /tanks', () => {
   it('Should return status 401', async () => {
     await supertest(app).get('/tank').expect(401);
   });
