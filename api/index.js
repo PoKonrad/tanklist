@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config';
 import auth from './src/controllers/auth.js';
-import tank from './src/controllers/tank.js';
+import tanks from './src/controllers/tanks.js';
 import 'express-async-errors';
 const app = express();
 app.use(express.json());
@@ -17,9 +17,9 @@ const errorHandling = (err, req, res, next) => {
 };
 
 app.use('/auth', auth);
-app.use('/tank', tank);
+app.use('/tanks', tanks);
 app.use(errorHandling);
 
-app.listen(10000);
+app.listen(8000);
 
 export default app;
