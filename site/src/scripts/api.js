@@ -17,13 +17,21 @@ class api {
     return await this._fetch('POST', url, auth, body);
   }
 
+  async put(url, body, auth = true) {
+    return await this._fetch('PUT', url, auth, body);
+  }
+
+  async delete(url, auth = true) {
+    return await this._fetch('DELETE', url, auth);
+  }
+
   async get(url, auth = true) {
     return await this._fetch('GET', url, auth);
   }
 
   async _fetch(method, url, auth, body, afterRefresh) {
     try {
-      const data = await fetch(`api${url}`, {
+      const data = await fetch(`${url}`, {
         method: method,
         headers: new Headers(
           auth

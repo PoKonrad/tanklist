@@ -11,7 +11,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import React, { useState } from 'react';
-import EditTank from './EditTank';
+import EditTank from './TankForm';
 import api from '../scripts/api';
 
 const TankTableRow = ({ row, refreshTabData }) => {
@@ -23,13 +23,18 @@ const TankTableRow = ({ row, refreshTabData }) => {
 
   const handleDelete = async () => {
     try {
-      await api.post(`/tank/${row.id}/delete`);
+      await api.delete(`/tanks/${row.id}`);
       setDeleteDialog(false);
       await refreshTabData();
     } catch (error) {
       // To do
     }
   };
+
+  const handleFetch = async (tankObject) => {
+    await api.put(`/tanks/${row?.id}`, tankObject);
+  };
+
   const [deleteDialog, setDeleteDialog] = useState(false);
   return (
     <>
@@ -42,7 +47,7 @@ const TankTableRow = ({ row, refreshTabData }) => {
         <TableCell align="center">{row?.introduced}</TableCell>
         <TableCell align="center">{row?.ammoCount}</TableCell>
         <TableCell align="center">{row?.mileage}km</TableCell>
-        <TableCell align="center">
+        <TableCell sx={{ maxWidth: '1rem' }} align="center">
           Back: {row?.armorThicknessBack}mm Front: {row?.armorThicknessFront}mm Side:{' '}
           {row?.armorThicknessSide}mm
         </TableCell>
@@ -68,8 +73,14 @@ const TankTableRow = ({ row, refreshTabData }) => {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
-          <EditTank show={edit} placeholders={row} refreshTabData={refreshTabData} id={row.id} />
+        <TableCell style={{ paddingBlock: 0 }} colSpan={12}>
+          <EditTank
+            show={edit}
+            placeholders={row}
+            refreshTabData={refreshTabData}
+            id={row.id}
+            handleFetch={handleFetch}
+          />
         </TableCell>
       </TableRow>
 

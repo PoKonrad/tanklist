@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../scripts/api.js';
 import TankTableRow from './TankTableRow';
 import AddIcon from '@mui/icons-material/Add';
-import NewTank from './NewTank';
+import EditTank from './TankForm.jsx';
 
 const TankTable = () => {
   const [rows, setRows] = useState();
@@ -22,17 +22,22 @@ const TankTable = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const resp = await api.get(`/tank`);
+      const resp = await api.get(`/tanks`);
       setRows(resp.data);
     };
     getData();
   }, []);
 
   const refreshTabData = async () => {
-    const resp = await api.get(`/tank`);
+    const resp = await api.get(`/tanks`);
     setNewDialogShown(false);
     setRows(resp.data);
   };
+
+  const handleFetch = tankObject => {
+    api.post('/tanks', tankObject)
+  }
+
 
   return (
     <Box
@@ -42,7 +47,7 @@ const TankTable = () => {
         width: '100%'
       }}
     >
-      <NewTank show={newDialogShown} refreshTabData={refreshTabData} />
+      <EditTank show={newDialogShown} refreshTabData={refreshTabData} handleFetch={handleFetch} />
       <TableContainer component={Paper}>
         <Table aria-label="Table containing tanks">
           <TableHead>
