@@ -20,6 +20,6 @@ app.use('/auth', auth);
 app.use('/tanks', tanks);
 app.use(errorHandling);
 
-app.listen(8000);
+app.listen(10000);
 
 export default app;

@@ -7,7 +7,6 @@ const sequelize = new Sequelize(
   {
     host: dbconfig.DB_HOST,
     dialect: 'mariadb',
-    password: dbconfig.DB_PASSWORD,
     logging: process.env.NODE_ENV == 'test' ? false : true,
   }
 );

@@ -25,8 +25,17 @@ router.post('/login', async (req, res) => {
     throw new Error('Wrong credentials');
   }
 
-  const token = await generateToken(user.email, user.id, user.name);
-  return res.status(200).json(token);
+  const token = await generateToken(user.email, user.id);
+  return res.status(200).json({
+    ...token,
+    userData: {
+      id: user.id,
+      name: user.name,
+      country: user.country,
+      email: user.email,
+      button: user.button,
+    },
+  });
 });
 
 router.post(

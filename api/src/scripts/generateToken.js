@@ -11,14 +11,12 @@ const addHours = (numOfHours, date) => {
 /**
  * @param {string} email Email
  * @param {number} id User id
- * @param {string} name User name
  * @returns Token object
  */
-const generateToken = async (user, id, name) => {
+const generateToken = async (user, id) => {
   const dataToSign = {
     sub: id,
     email: user,
-    name: name
   };
 
   const refreshToken = await cryptoRandomStringAsync({ length: 40 });
@@ -43,8 +41,7 @@ const generateToken = async (user, id, name) => {
   const response = {
     status: 'Logged in',
     token,
-    refreshToken,
-    userData: dataToSign,
+    refreshToken
   };
 
   return response;

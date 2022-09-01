@@ -6,7 +6,7 @@ import { checkSchema, validationResult } from 'express-validator';
 import tankValidatorSchema from '../validatorSchemas/tankSchema.js'
 
 const router = Router();
-//router.use(authMiddleware);
+router.use(authMiddleware);
 
 // New
 router.post('/', checkSchema(tankValidatorSchema), async (req, res) => {

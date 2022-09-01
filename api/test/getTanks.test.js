@@ -3,9 +3,9 @@ import app from '../index.js';
 import testUser from './testUser.js';
 import { expect } from 'chai';
 
-describe('GET /tanks', () => {
+describe('GET /tanks/', () => {
   it('Should return status 401', async () => {
-    await supertest(app).get('/tank').expect(401);
+    await supertest(app).get('/tanks').expect(401);
   });
 
   let token = null;
@@ -26,7 +26,7 @@ describe('GET /tanks', () => {
 
   it('Should return status 200 and an array', async () => {
     const resp = await supertest(app)
-      .get('/tank')
+      .get('/tanks')
       .set({ 'x-access-token': token })
       .expect(200);
 
