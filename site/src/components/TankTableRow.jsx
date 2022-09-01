@@ -6,12 +6,13 @@ import {
   Dialog,
   DialogTitle,
   Button,
-  DialogActions
+  DialogActions,
+  Collapse
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import React, { useState } from 'react';
-import EditTank from './TankForm';
+import TankForm from './TankForm';
 import api from '../scripts/api';
 
 const TankTableRow = ({ row, refreshTabData }) => {
@@ -23,16 +24,21 @@ const TankTableRow = ({ row, refreshTabData }) => {
 
   const handleDelete = async () => {
     try {
+      // eslint-disable-next-line no-debugger
+      debugger;
       await api.delete(`/tanks/${row.id}`);
       setDeleteDialog(false);
       await refreshTabData();
     } catch (error) {
-      // To do
+      //
     }
   };
 
   const handleFetch = async (tankObject) => {
     await api.put(`/tanks/${row?.id}`, tankObject);
+    setTimeout(() => {
+      setEdit(false)
+    }, 1000)
   };
 
   const [deleteDialog, setDeleteDialog] = useState(false);
@@ -74,13 +80,15 @@ const TankTableRow = ({ row, refreshTabData }) => {
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBlock: 0 }} colSpan={12}>
-          <EditTank
-            show={edit}
-            placeholders={row}
-            refreshTabData={refreshTabData}
-            id={row.id}
-            handleFetch={handleFetch}
-          />
+          <Collapse in={edit}>
+            <TankForm
+              show={edit}
+              placeholders={row}
+              refreshTabData={refreshTabData}
+              id={row.id}
+              handleFetch={handleFetch}
+            />
+          </Collapse>
         </TableCell>
       </TableRow>
 

@@ -109,7 +109,6 @@ const Register = () => {
   };
 
   const handlePassword = (e) => {
-    console.log(e.target.value);
     if (
       e.target.value.match(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/g
@@ -127,7 +126,6 @@ const Register = () => {
   };
 
   const handleEmail = (e) => {
-    console.log(e.target.value);
     if (
       e.target.value
         .toLowerCase()

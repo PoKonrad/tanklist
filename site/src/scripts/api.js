@@ -31,7 +31,7 @@ class api {
 
   async _fetch(method, url, auth, body, afterRefresh) {
     try {
-      const data = await fetch(`${url}`, {
+      const data = await fetch(`/api${url}`, {
         method: method,
         headers: new Headers(
           auth
@@ -46,7 +46,14 @@ class api {
         body: body ? JSON.stringify(body) : undefined
       }).then((resp) => {
         if (resp.ok) {
-          return resp.json();
+          if (resp.status === 201 || resp.status === 204) {
+            return;
+          }
+
+          return resp
+            .json()
+            .then((resp) => resp)
+            .catch((err) => err);
         } else {
           throw resp;
         }

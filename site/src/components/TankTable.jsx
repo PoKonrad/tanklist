@@ -1,5 +1,6 @@
 import {
   Box,
+  Collapse,
   IconButton,
   Paper,
   Table,
@@ -14,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../scripts/api.js';
 import TankTableRow from './TankTableRow';
 import AddIcon from '@mui/icons-material/Add';
-import EditTank from './TankForm.jsx';
+import TankForm from './TankForm.jsx';
 
 const TankTable = () => {
   const [rows, setRows] = useState();
@@ -34,10 +35,9 @@ const TankTable = () => {
     setRows(resp.data);
   };
 
-  const handleFetch = tankObject => {
-    api.post('/tanks', tankObject)
-  }
-
+  const handleFetch = async (tankObject) => {
+    await api.post('/tanks', tankObject);
+  };
 
   return (
     <Box
@@ -47,7 +47,9 @@ const TankTable = () => {
         width: '100%'
       }}
     >
-      <EditTank show={newDialogShown} refreshTabData={refreshTabData} handleFetch={handleFetch} />
+      <Collapse in={newDialogShown} unmountOnExit>
+        <TankForm refreshTabData={refreshTabData} handleFetch={handleFetch} />
+      </Collapse>
       <TableContainer component={Paper}>
         <Table aria-label="Table containing tanks">
           <TableHead>
@@ -80,10 +82,10 @@ const TankTable = () => {
                 <Typography>Armor Thickness</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography>Created</Typography>
+                <Typography>Created (GMT)</Typography>
               </TableCell>
               <TableCell align="center">
-                <Typography>Last Modified</Typography>
+                <Typography>Last Modified (GMT)</Typography>
               </TableCell>
               <TableCell align="right">
                 <IconButton onClick={() => setNewDialogShown(!newDialogShown)}>

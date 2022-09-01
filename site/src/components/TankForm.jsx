@@ -2,7 +2,7 @@ import { TextField, Typography, Button, Collapse, Grid, Alert } from '@mui/mater
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 
-const EditTank = ({ show, placeholders, id, refreshTabData, handleFetch }) => {
+const EditTank = ({ placeholders, refreshTabData, handleFetch }) => {
   const [model, setModel] = useState(placeholders?.model);
   const [producer, setProducer] = useState(placeholders?.producer);
   const [sideNumber, setSideNumber] = useState(placeholders?.sideNumber);
@@ -40,15 +40,21 @@ const EditTank = ({ show, placeholders, id, refreshTabData, handleFetch }) => {
         mileage: mileage
       });
       refreshTabData();
-      setSuccess(true);
+      handleOpenSuccess();
     } catch (error) {
       const errorJson = await error.json();
       setError(errorJson);
     }
   };
 
+  const handleOpenSuccess = () => {
+    setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+        }, 2000)
+};
+
   return (
-    <Collapse in={show} unmountOnExit>
       <Box
         sx={{
           display: 'flex',
@@ -221,14 +227,13 @@ const EditTank = ({ show, placeholders, id, refreshTabData, handleFetch }) => {
             </Grid>
           </Grid>
         </Box>
-        <Collapse in={error?.error}>
+        <Collapse in={error?.error} unmountOnExit>
           <Alert severity="error">{error?.message}</Alert>
         </Collapse>
-        <Collapse in={success}>
+        <Collapse in={success} unmountOnExit>
           <Alert severity="success">Successfully edited.</Alert>
         </Collapse>
       </Box>
-    </Collapse>
   );
 };
 
